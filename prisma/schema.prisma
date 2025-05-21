@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Track {
+  id             String @id @map("_id")
+  title          String
+  artist         String
+  CoverUrl       String
+  genre          String
+  duration       String
+  blobId         String
+  blobObjectId   String
+  creatorAddress String
+  creatorId      String
+  downloads      BigInt
+
+  playlists PlaylistTrack[]
+}
+
+model Playlist {
+  id          String          @id @map("_id")
+  name        String
+  creator     String
+  is_public   Boolean
+  description String?
+  created_at  DateTime?
+  tracks      PlaylistTrack[]
+}
+
+model PlaylistTrack {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  playlistId String
+  track      Track    @relation(fields: [trackId], references: [id])
+  trackId    String
+
+  @@unique([playlistId, trackId])
+}
+
+model Cursor {
+  id       String @id @map("_id")
+  eventSeq String
+  txDigest String
+}
