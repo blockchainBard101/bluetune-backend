@@ -22,15 +22,23 @@ export class BluetuneService {
     }
 
     getPlaylistsByCreator(creatorId: string) {
-        return this.prisma.playlist.findMany({
-            where: { creator: creatorId },
-            include: {
-                tracks: {
-                    include: {
-                        track: true,
-                    },
+    return this.prisma.playlist.findMany({
+        where: { creator: creatorId },
+        include: {
+            tracks: {
+                include: {
+                    track: true,
                 },
             },
-        });
-    }
+            _count: {
+                select: {
+                    tracks: true,
+                },
+            },
+        },
+        orderBy: {
+            created_at: 'desc',
+        },
+    });
+}
 }
