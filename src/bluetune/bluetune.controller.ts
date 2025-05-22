@@ -19,4 +19,8 @@ export class BluetuneController {
     getPlaylistsByCreator(@Param('creatorId') creatorId: string) {
         return this.bluetune.getPlaylistsByCreator(creatorId);
     }
+    @Get('playlists/:playlistId')
+    getPlaylistById(@Param('playlistId') playlistId: string) {
+        return this.bluetune.getPlaylistById(playlistId);
+    }
 }
